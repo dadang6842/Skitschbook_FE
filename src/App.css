@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+body {
+  background-image: url("./img/background/webBackgroundImage.jpg");
+}
+
 .width-wrapper {
   margin: 0 auto;
   max-width: 600px;
@@ -11,13 +15,14 @@
 .container {
   width: 100vw;
   aspect-ratio: 9 / 16;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   overflow: scroll;
+  background-image: url("./img/background/backgroundImageA.jpg");
+  background-size: cover;
 }
 
 .container::-webkit-scrollbar {

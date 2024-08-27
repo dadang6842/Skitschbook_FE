@@ -3,13 +3,11 @@ import styled from "styled-components";
 import AlertBox from "../others/alert";
 import { useNavigate } from "react-router-dom";
 
-const Button = styled.div`
-  width: 20%;
+const Button = styled.img`
+  width: 14%;
   position: absolute;
-  top: 3%;
+  top: 2%;
   right: 3%;
-  background-color: pink;
-  padding: 4%;
   cursor: pointer;
 `;
 
@@ -25,12 +23,13 @@ function EndButton() {
   const navigate = useNavigate();
   const handleConfirmClick = () => {
     setShowAlert(false);
-    navigate("/main"); // navigate로 경로 이동
+    navigate("/main");
     // 스키치 서버에 전송
   };
+
   return (
     <div>
-      <Button onClick={() => setShowAlert(true)}>종료</Button>
+      <Button src="/img/12/2_end.png" onClick={() => setShowAlert(true)} />
       {showAlert && (
         <>
           <AlertBox id="confirmBox">

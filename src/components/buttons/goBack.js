@@ -2,11 +2,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Button = styled.div`
-  width: 8%;
-  padding: 5px;
-  background-color: pink;
+  width: 11%;
   position: absolute;
-  top: 3%;
+  top: 2%;
   left: 3%;
   cursor: pointer;
 `;

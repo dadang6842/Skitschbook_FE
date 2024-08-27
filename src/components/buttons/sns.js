@@ -1,29 +1,31 @@
 import styled from "styled-components";
 
-const Button = styled.div`
-    width: 10%;
-    padding; 7%;
-    position: absolute;
-    bottom: 3%;
+const Button = styled.img`
+  width: 8%;
+  position: absolute;
+  bottom: 2%;
+  cursor: pointer;
+
+  &:nth-child(5) {
     left: 3%;
-    background-color: pink;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  }
+
+  &:nth-child(6) {
+    left: 13%;
+  }
 `;
 
-function SNSButton() {
-  const url = "https://www.instagram.com";
+function SNSButton(props) {
+  const url = props.url;
+  const src = props.src;
 
   return (
     <Button
+      src={src}
       onClick={() => {
         window.open(url);
       }}
-    >
-      SNS
-    </Button>
+    />
   );
 }
 

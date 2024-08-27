@@ -1,17 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-const Button = styled.div`
+const Button = styled.img`
   width: 10%;
-  padding: 3%;
   position: absolute;
   right: 3%;
-  top: 3%;
-  background-color: pink;
+  top: 2%;
   cursor: pointer;
 `;
 
 function SettingButton() {
-  return <Button>설정</Button>;
+  const navigate = useNavigate();
+
+  return <Button src="/img/1/3_setting.png" onClick={navigate("/setting")} />;
 }
 
 export default SettingButton;
