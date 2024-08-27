@@ -1,9 +1,9 @@
 import { useEffect } from "react";
+import { fabric } from "fabric";
+import styled from "styled-components";
 import { useCanvas } from "../../../pages/12_drawSkitsch.js";
 import PenColor from "./2_PenColor.js";
 import PenBrushWidthSlider from "./1_PenBrushWidthSlider.js";
-import styled from "styled-components";
-import { fabric } from "fabric";
 
 const PenContainer = styled.div`
   width: 100%;

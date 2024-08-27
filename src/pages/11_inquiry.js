@@ -91,22 +91,10 @@ function Inquiry() {
   };
 
   const handleFinalConfirm = () => {
-    // 문의사항, 이메일 서버로 전송
-    axios
-      .post(
-        "url",
-        { inquiry: inquiry, email: email },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
-          },
-        }
-      )
-      .then(() => console.log("문의사항, 이메일 전송 성공"))
-      .catch((err) => console.log("문의사항, 이메일 전송 실패", err));
-
-    // 파일 전송
+    // 문의사항, 이메일, 파일 전송
     const formData = new FormData();
+    formData.append("inquiry", inquiry);
+    formData.append("email", email);
     formData.append("file", selectedFile);
 
     axios
@@ -117,11 +105,11 @@ function Inquiry() {
         },
       })
       .then(() => {
-        console.log("파일 전송 성공");
+        console.log("전송 성공");
         setFinalConfirm(false);
         setSubmitFinished(true);
       })
-      .catch((err) => console.log("파일 전송 실패: ", err));
+      .catch((err) => console.log("전송 실패: ", err));
   };
 
   return (

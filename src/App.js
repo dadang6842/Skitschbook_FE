@@ -22,19 +22,19 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/main" element={<Main />} />
+        <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/drawSkitsch" element={<DrawSkitschWithProvider />} />
+        <Route path="/inputName" element={<InputName />} />
         <Route path="/uploadImage" element={<UploadImage />} />
         <Route path="/uploadImageSetting" element={<UploadImageSetting />} />
         <Route path="/uploadImageFinished" element={<UploadImageFinished />} />
-        <Route path="/skitschFinished" element={<SkitschFinished />} />
-        <Route path="/inputName" element={<InputName />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/viewSkitsch/:id" element={<ViewSkitsch />} />
         <Route path="/setting" element={<Setting />} />
         <Route path="/changeName" element={<ChangeName />} />
         <Route path="/inquiry" element={<Inquiry />} />
-        <Route path="/viewSkitsch/:" element={<ViewSkitsch />} />
+        <Route path="/drawSkitsch:id" element={<DrawSkitschWithProvider />} />
+        <Route path="/skitschFinished" element={<SkitschFinished />} />
         <Route path="/loading" element={<Loading />} />
         <Route path="/expiredUrl" element={<ExpiredUrl />} />
         <Route path="/error" element={<Error />} />

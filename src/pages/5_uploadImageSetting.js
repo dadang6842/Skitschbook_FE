@@ -7,23 +7,25 @@ import axios from "axios";
 
 function UploadImageSetting() {
   const navigate = useNavigate();
+  // '누구나 스키치할 수 있게 하기' 선택 시 true, '로그인한 사람만 스키치할 수 있게 하기' 선택 시 false 값을 서버에 보냄
   const [canAllUserSkitsch, setCanAllUsersSkitch] = useState(true);
 
   const sendUserSkitschPermission = () => {
-    // axios.post("url", canAllUserSkitsch),
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
-    //     },
-    //   }
-    //     .then(() => {
-    //       console.log("사용자 설정 완료");
-    //       navigate("/uploadImageFinished");
-    //     })
-    //     .catch((err) => {
-    //       console.log("사용자 설정 오류: ", err);
-    //     });
+    axios
+      .post("url", canAllUserSkitsch, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
+        },
+      })
+      .then(() => {
+        console.log("사용자 설정 완료");
+        navigate("/uploadImageFinished");
+      })
+      .catch((err) => {
+        console.log("사용자 설정 오류: ", err);
+      });
   };
+
   return (
     <div className="width-wrapper">
       <div className="container">

@@ -16,8 +16,6 @@ function ViewSkitsch() {
   const [showSkitsch, setShowSkitsch] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
 
-  // 이미지 다운로드, 보여주는 메서드 수정 많이 필요
-  // 서버에서 이미지 어떻게 가져와야 하는지?
   const showImage = () => {
     axios
       .get("url", {

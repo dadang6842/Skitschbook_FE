@@ -1,11 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { createRoot } from "react-dom/client";
 import Cropper from "react-easy-crop";
-import Slider from "@material-ui/core/Slider";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import { getOrientation } from "get-orientation/browser";
 import { getCroppedImg } from "../crop/canvasUtils.js";
 import { styles } from "../crop/styles.js";
 import { useNavigate } from "react-router-dom";
@@ -55,20 +51,23 @@ const UploadImage = ({ classes }) => {
   };
 
   const sendImage = () => {
-    // 이미지를 어떤 형식으로 전송해야할지
-    // axios.post("url", croppedImage),
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
-    //     },
-    //   }
-    //     .then(() => {
-    //       console.log("이미지 전송 성공");
-    //       navigate("/uploadImageSetting");
-    //     })
-    //     .catch((err) => {
-    //       console.log("이미지 전송 오류: ", err);
-    //     });
+    const formData = new FormData();
+    formData.append("file", croppedImage);
+
+    axios
+      .post("url", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        console.log("이미지 전송 성공");
+        navigate("/uploadImageSetting");
+      })
+      .catch((err) => {
+        console.log("이미지 전송 오류: ", err);
+      });
   };
 
   return (

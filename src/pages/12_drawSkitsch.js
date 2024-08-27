@@ -8,6 +8,8 @@ import React, {
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { fabric } from "fabric";
+import { useParams } from "react-router-dom";
+import io from "socket.io-client";
 import DrawingToolBar from "../components/12_DrawingTools/DrawingToolBar.js";
 import EndButton from "../components/buttons/end.js";
 import SkitschNameBox from "../components/others/skitschName.js";
@@ -16,7 +18,8 @@ import SmallLogo from "../components/buttons/smallLogo.js";
 const CanvasContext = createContext(null);
 
 function DrawSkitsch() {
-  // 실시간 처리 메서드 작성 필요
+  const { id } = useParams();
+  const socket = io.connect("http://localhost:8080"); // url 수정 필요
   const canvasRef = useRef(null); // useRef로 canvas 요소 참조
   const canvasContainerRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
@@ -61,6 +64,22 @@ function DrawSkitsch() {
     }
   }, [canvas, finalCroppedImage]);
 
+  // 웹소켓 코드
+  // 캔버스 변경 시 데이터 전송
+  useEffect(() => {
+    const saveCanvas = canvas.toObject(); // 캔버스에 있는 객체들을 객체 형태로 변환
+    const saveCanvasString = JSON.stringify(saveCanvas); // 객체를 JSON 문자열로 변환
+    socket.emit("event", saveCanvasString);
+  }, [canvas]);
+
+  // 웹소켓 작동 시 데이터 받아옴
+  useEffect(() => {
+    socket.on("event", (data) => {
+      canvas.loadFromJson(data);
+    });
+  }, [socket]);
+
+  // 캔버스 저장을 위한 코드
   useEffect(() => {
     const interval = setInterval(() => {
       const saveCanvas = canvas.toObject(); // 캔버스에 있는 객체들을 객체 형태로 변환

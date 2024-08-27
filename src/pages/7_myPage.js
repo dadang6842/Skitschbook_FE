@@ -16,6 +16,7 @@ const SkitschImage = styled.img`
 `;
 
 function MyPage() {
+  // + 무한 스크롤 구현 필요
   const [skitschList, setSkitschList] = useState([]); // Blob과 문자열 배열을 받을 state
 
   const getSkitschList = () => {
@@ -27,8 +28,8 @@ function MyPage() {
         responseType: "json",
       })
       .then((res) => {
-        // 수정 많이 필요
-        // 서버가 데이터를 json 형식으로 blob 배열(이미지)과 문자열 배열(각 이미지의 고유 번호)을 제공한다는 가정
+        // 수정 필요
+        // 서버가 데이터를 json 형식으로 blob 배열(이미지)과 문자열 배열(각 이미지의 고유 번호)을 제공한다는 가정 하
         const blobs = res.data.blobs;
         const urls = res.data.urls;
 
