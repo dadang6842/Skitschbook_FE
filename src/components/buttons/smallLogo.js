@@ -13,7 +13,7 @@ function SmallLogo() {
   const navigate = useNavigate();
 
   return (
-    <Button src="/img/icons/smallLogo.png" onClick={() => navigate("/main")} />
+    <Button src="/img/icons/smallLogo.png" onClick={() => navigate("/")} />
   );
 }
 

@@ -12,9 +12,7 @@ const Button = styled.img`
 function BigLogo() {
   const navigate = useNavigate();
 
-  return (
-    <Button src="/img/icons/bigLogo.png" onClick={() => navigate("/main")} />
-  );
+  return <Button src="/img/icons/bigLogo.png" onClick={() => navigate("/")} />;
 }
 
 export default BigLogo;

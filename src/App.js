@@ -17,6 +17,8 @@ import ViewSkitsch from "./pages/8_viewSkitsch.js";
 import Loading from "./pages/14_loading.js";
 import ExpiredUrl from "./pages/15_expiredUrl.js";
 import Error from "./pages/16_error.js";
+import KakaoRedirection from "./functions/2_login/1_kakaoRedirection.js";
+import NaverRedirection from "./functions/2_login/2_naverRedirection.js";
 
 function App() {
   return (
@@ -38,6 +40,8 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/expiredUrl" element={<ExpiredUrl />} />
         <Route path="/error" element={<Error />} />
+        <Route path="/naver/callback" element={<NaverRedirection />} />
+        {/* <Route path="/백엔드에서 준 URI?" element={<KakaoRedirection />} /> */}
       </Routes>
     </div>
   );
