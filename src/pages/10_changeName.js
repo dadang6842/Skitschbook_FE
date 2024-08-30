@@ -21,20 +21,20 @@ const ChangeButton = styled.div`
   cursor: pointer;
 `;
 
-function ChangeName() {
-  const [name, setName] = useState("");
+function Changenickname() {
+  const [nickname, setnickname] = useState("");
   const [isChanged, setIsChanged] = useState(false);
 
-  const handleChangeName = (e) => {
-    setName(e.target.value);
+  const handleChangenickname = (e) => {
+    setnickname(e.target.value);
   };
 
-  const finishedChangeName = () => {
+  const finishedChangenickname = async () => {
     // 이름 서버로 전송
-    axios
-      .post("url", name, {
+    await axios
+      .put("http://localhost:8080/update/nickname", {nickname}, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       })
       .then(() => {
@@ -46,21 +46,21 @@ function ChangeName() {
   };
 
   return (
-    <div className="width-wrapper">
-      <div className="container">
+    <div classnickname="width-wrapper">
+      <div classnickname="container">
         <GoBackButton />
         <PageTitle>이름 변경</PageTitle>
         <TextBox
           type="text"
-          value={name}
+          value={nickname}
           placeholder="변경할 이름을 입력하세요"
-          onChange={handleChangeName}
+          onChange={handleChangenickname}
         />
-        <ChangeButton onClick={finishedChangeName}>변경</ChangeButton>
+        <ChangeButton onClick={finishedChangenickname}>변경</ChangeButton>
         {isChanged && <AlertBox>변경되었습니다!</AlertBox>}
       </div>
     </div>
   );
 }
 
-export default ChangeName;
+export default Changenickname;
