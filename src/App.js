@@ -2,7 +2,6 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UploadImage from "./pages/4_uploadImage.js";
-import UploadImageSetting from "./pages/5_uploadImageSetting.js";
 import UploadImageFinished from "./pages/6_uploadImageFinished.js";
 import DrawSkitschWithProvider from "./pages/12_drawSkitsch.js";
 import Main from "./pages/0_main.js";
@@ -17,7 +16,6 @@ import ViewSkitsch from "./pages/8_viewSkitsch.js";
 import Loading from "./pages/14_loading.js";
 import ExpiredUrl from "./pages/15_expiredUrl.js";
 import Error from "./pages/16_error.js";
-import KakaoRedirection from "./functions/2_login/1_kakaoRedirection.js";
 import NaverRedirection from "./functions/2_login/2_naverRedirection.js";
 
 function App() {
@@ -28,7 +26,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/inputName" element={<InputName />} />
         <Route path="/uploadImage" element={<UploadImage />} />
-        <Route path="/uploadImageSetting" element={<UploadImageSetting />} />
         <Route path="/uploadImageFinished" element={<UploadImageFinished />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/viewSkitsch/:id" element={<ViewSkitsch />} />

@@ -10,6 +10,7 @@ import PrevNextButton from "../components/buttons/prev_next.js";
 import ExplanationBox from "../components/others/explanationBox.js";
 import BigLogo from "../components/buttons/bigLogo.js";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
 const UploadImageFlow = ({ classes }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -62,7 +63,8 @@ const UploadImageFlow = ({ classes }) => {
     try {
       const blob = await fetch(croppedImage).then((res) => res.blob());
       const formData = new FormData();
-      formData.append("file", blob, "image.jpg");
+      const randomFileName = uuidv4() + '.jpg'; // .jpg로 저장
+      formData.append("file", blob, randomFileName);
       formData.append("canAllUserSkitsch", canAllUserSkitsch); // 사용자 설정 추가
 
       await axios.post("http://localhost:8080/skitsche/save", formData, {
