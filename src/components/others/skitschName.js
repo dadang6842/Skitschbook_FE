@@ -11,23 +11,23 @@ const Box = styled.div`
 `;
 
 function SkitschNameBox() {
-  const [name, setName] = useState("");
+  const [nickname, setName] = useState("");
 
   useEffect(() => {
     axios
-      .get("url", {
+      .put("http://localhost:8080/update/nickname", {nickname}, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       })
       .then((res) => {
-        setName(res.data);
+        setName(res.data.message);
         console.log("이름 가져오기 성공");
       })
       .catch((err) => console.log("이름 가져오기 실패", err));
   });
 
-  return <Box>{name}님의 스키치</Box>;
+  return <Box>{nickname}님의 스키치</Box>;
 }
 
 export default SkitschNameBox;

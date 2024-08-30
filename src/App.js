@@ -40,7 +40,7 @@ function App() {
         <Route path="/loading" element={<Loading />} />
         <Route path="/expiredUrl" element={<ExpiredUrl />} />
         <Route path="/error" element={<Error />} />
-        <Route path="/naver/callback" element={<NaverRedirection />} />
+        <Route path="/callback" element={<NaverRedirection />} />
         {/* <Route path="/백엔드에서 준 URI?" element={<KakaoRedirection />} /> */}
       </Routes>
     </div>
