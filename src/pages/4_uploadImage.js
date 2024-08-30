@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from "react";
-import { createRoot } from "react-dom/client";
 import Cropper from "react-easy-crop";
 import { withStyles } from "@material-ui/core/styles";
 import { getCroppedImg } from "../crop/canvasUtils.js";
@@ -12,12 +11,14 @@ import ExplanationBox from "../components/others/explanationBox.js";
 import BigLogo from "../components/buttons/bigLogo.js";
 import axios from "axios";
 
-const UploadImage = ({ classes }) => {
-  const [imageSrc, setImageSrc] = React.useState(null);
+const UploadImageFlow = ({ classes }) => {
+  const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
+  const [canAllUserSkitsch, setCanAllUsersSkitch] = useState(true);
+  const [currentStep, setCurrentStep] = useState(1); // 1: 이미지 업로드, 2: 설정
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -28,7 +29,6 @@ const UploadImage = ({ classes }) => {
   const showCroppedImage = async () => {
     try {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
-      console.log("done", { croppedImage });
       setCroppedImage(croppedImage);
       dispatch(setFinalCroppedImage(croppedImage));
     } catch (e) {
@@ -44,103 +44,136 @@ const UploadImage = ({ classes }) => {
     }
   };
 
-  // '이전' 버튼을 눌렀을 때 파일 선택창으로 돌아가기 위한 함수
   const onBack = () => {
-    setCroppedImage(null);
-    setImageSrc(null);
+    if (currentStep === 2) {
+      setCurrentStep(1); // 설정 단계에서 이미지 업로드 단계로 돌아가기
+    } else {
+      setCroppedImage(null);
+      setImageSrc(null);
+    }
   };
 
-  const sendImage = () => {
-    const formData = new FormData();
-    formData.append("file", croppedImage);
+  const sendFinalRequest = async () => {
+    if (!croppedImage) {
+      alert("이미지가 잘못되었습니다.");
+      return;
+    }
 
-    axios
-      .post("url", formData, {
+    try {
+      const blob = await fetch(croppedImage).then((res) => res.blob());
+      const formData = new FormData();
+      formData.append("file", blob, "image.jpg");
+      formData.append("canAllUserSkitsch", canAllUserSkitsch); // 사용자 설정 추가
+
+      await axios.post("http://localhost:8080/skitsche/save", formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           "Content-Type": "multipart/form-data",
         },
-      })
-      .then(() => {
-        console.log("이미지 전송 성공");
-        navigate("/uploadImageSetting");
-      })
-      .catch((err) => {
-        console.log("이미지 전송 오류: ", err);
       });
+
+      console.log("이미지 및 사용자 설정 전송 성공");
+      navigate("/uploadImageFinished");
+    } catch (err) {
+      console.error("최종 요청 오류: ", err);
+    }
   };
 
   return (
     <div className="width-wrapper">
       <div className="container">
         <BigLogo />
-        <ExplanationBox>설명</ExplanationBox>
-        {croppedImage ? (
+        <ExplanationBox>
+          {currentStep === 1 ? "이미지 업로드" : "누가 스키치 가능?"}
+        </ExplanationBox>
+
+        {currentStep === 1 ? (
+          // 이미지 업로드 및 크롭 단계
           <>
-            <img
-              src={croppedImage}
-              alt="Cropped"
-              style={{
-                objectFit: "contain",
-                width: "70%",
-                marginTop: "7%",
-              }}
-            />
-            <div className="prev-next-buttons">
-              <PrevNextButton onClick={onBack}>이전</PrevNextButton>
-              <PrevNextButton onClick={sendImage}>다음</PrevNextButton>
-            </div>
+            {croppedImage ? (
+              <>
+                <img
+                  src={croppedImage}
+                  alt="Cropped"
+                  style={{
+                    objectFit: "contain",
+                    width: "70%",
+                    marginTop: "7%",
+                  }}
+                />
+                <div className="prev-next-buttons">
+                  <PrevNextButton onClick={onBack}>이전</PrevNextButton>
+                  <PrevNextButton onClick={() => setCurrentStep(2)}>다음</PrevNextButton>
+                </div>
+              </>
+            ) : imageSrc ? (
+              <React.Fragment>
+                <div className={classes.cropContainer}>
+                  <Cropper
+                    image={imageSrc}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={3 / 4}
+                    onCropChange={setCrop}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                  />
+                </div>
+                <div className="prev-next-buttons">
+                  <PrevNextButton onClick={onBack}>이전</PrevNextButton>
+                  <PrevNextButton
+                    onClick={showCroppedImage}
+                    classes={{ root: classes.cropButton }}
+                  >
+                    다음
+                  </PrevNextButton>
+                </div>
+              </React.Fragment>
+            ) : (
+              <>
+                <label
+                  id="inputImage"
+                  style={{
+                    width: "70%",
+                    height: "50%",
+                    border: "1px solid black",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="file"
+                    id="inputImage"
+                    onChange={onFileChange}
+                    accept="image/*"
+                    style={{ display: "none" }}
+                  />
+                </label>
+                <div className="prev-next-buttons">
+                  <PrevNextButton onClick={onBack}>이전</PrevNextButton>
+                  <PrevNextButton
+                    onClick={() => {
+                      alert("사진을 넣어주세요.");
+                    }}
+                  >
+                    다음
+                  </PrevNextButton>
+                </div>
+              </>
+            )}
           </>
-        ) : imageSrc ? (
-          <React.Fragment>
-            <div className={classes.cropContainer}>
-              <Cropper
-                image={imageSrc}
-                crop={crop}
-                zoom={zoom}
-                aspect={3 / 4}
-                onCropChange={setCrop}
-                onCropComplete={onCropComplete}
-                onZoomChange={setZoom}
-              />
-            </div>
-            <div className="prev-next-buttons">
-              <PrevNextButton onClick={onBack}>이전</PrevNextButton>
-              <PrevNextButton
-                onClick={showCroppedImage}
-                classes={{ root: classes.cropButton }}
-              >
-                다음
-              </PrevNextButton>
-            </div>
-          </React.Fragment>
         ) : (
+          // 사용자 설정 단계
           <>
-            <label
-              id="inputImage"
-              style={{
-                width: "70%",
-                height: "50%",
-                border: "1px solid black",
-                cursor: "pointer",
-              }}
-            >
-              <input
-                type="file"
-                id="inputImage"
-                onChange={onFileChange}
-                accept="image/*"
-                style={{ display: "none" }}
-              />
-            </label>
+            <button onClick={() => setCanAllUsersSkitch(true)}>
+              누구나 스키치할 수 있게 하기
+            </button>
+            <button onClick={() => setCanAllUsersSkitch(false)}>
+              로그인한 사람만 스키치할 수 있게 하기
+            </button>
             <div className="prev-next-buttons">
-              <PrevNextButton onClick={onBack}>이전</PrevNextButton>
-              <PrevNextButton
-                onClick={() => {
-                  alert("사진을 넣어주세요.");
-                }}
-              >
-                다음
+              <PrevNextButton onClick={() => setCurrentStep(1)}>이전</PrevNextButton>
+              <PrevNextButton onClick={sendFinalRequest}>
+                완료
               </PrevNextButton>
             </div>
           </>
@@ -158,4 +191,4 @@ function readFile(file) {
   });
 }
 
-export default withStyles(styles)(UploadImage); // withStyles로 컴포넌트를 래핑
+export default withStyles(styles)(UploadImageFlow);

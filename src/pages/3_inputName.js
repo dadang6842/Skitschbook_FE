@@ -30,43 +30,46 @@ const Input = styled.input`
 `;
 
 function InputName() {
-  const [username, setUsername] = useState("");
-  const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [isNicknameEmpty, setIsNicknameEmpty] = useState(false);
   const [containSwearWord, setContainSwearWord] = useState(false);
-  const [isUsernameLong, setIsUsernameLong] = useState(false);
+  const [isNicknameLong, setIsNicknameLong] = useState(false);
   const navigate = useNavigate();
 
   const setName = (e) => {
-    setUsername(e.target.value);
+    setNickname(e.target.value);
   };
 
-  const handleSubmit = () => {
-    if (username === "") {
-      setIsUsernameEmpty(true);
-      setTimeout(() => setIsUsernameEmpty(false), 2000);
+  const handleSubmit = async () => {
+    if (nickname === "") {
+      setIsNicknameEmpty(true);
+      setTimeout(() => setIsNicknameEmpty(false), 2000);
     } else if (
-      username.indexOf("시발") != -1 ||
-      username.indexOf("새끼") != -1 ||
-      username.indexOf("좆") != -1
+      nickname.indexOf("시발") != -1 ||
+      nickname.indexOf("새끼") != -1 ||
+      nickname.indexOf("좆") != -1
     ) {
       setContainSwearWord(true);
       setTimeout(() => setContainSwearWord(false), 2000);
-    } else if (username.length > 8) {
-      setIsUsernameLong(true);
-      setTimeout(() => setIsUsernameLong(false), 2000);
+    } else if (nickname.length > 8) {
+      setIsNicknameLong(true);
+      setTimeout(() => setIsNicknameLong(false), 2000);
     } else {
-      // 서버에 이름 전달
-      // axios.post("url", username),
-      //   {
-      //     headers: {
-      //       Autorization: `Bearer ${localStorage.getItem("토큰 이름")}`,
-      //     },
-      //   }
-      //     .then(() => {})
-      //     .catch((err) => {
-      //       console.log("이름 전송 오류: ", err);
-      //     });
-      navigate("/main");
+      try {
+        await axios.put(
+          "http://localhost:8080/update/nickname",
+          { nickname },  
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              'Content-Type': 'application/json'
+            },
+          }
+        );
+        navigate("/main");
+      } catch (err) {
+        console.log("이름 전송 오류: ", err);
+      }
     }
   };
 
@@ -77,9 +80,9 @@ function InputName() {
         <InputBox src="/img/3/1_inputBox.png" />
         <Input type="text" onChange={setName} />
         <ConfirmButton src="/img/3/2_confirm.png" onClick={handleSubmit} />
-        {isUsernameEmpty && <AlertBox>이름을 입력하세요.</AlertBox>}
+        {isNicknameEmpty && <AlertBox>이름을 입력하세요.</AlertBox>}
         {containSwearWord && <AlertBox>바르고 고운 말을 사용하세요.</AlertBox>}
-        {isUsernameLong && <AlertBox>이름을 8자 이하로 입력헤주세요.</AlertBox>}
+        {isNicknameLong && <AlertBox>이름을 8자 이하로 입력헤주세요.</AlertBox>}
       </div>
     </div>
   );
